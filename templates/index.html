@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Jockey stats generator</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f3f4f6; margin: 0; padding: 40px; color: #0f172a; }
+.card { background: white; border-radius: 18px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+h1, h2 { margin-top: 0; }
+.row { display: flex; gap: 16px; align-items: end; flex-wrap: wrap; }
+.field { flex: 1; min-width: 220px; }
+label { display: block; margin-bottom: 8px; font-weight: 600; }
+input[type=text], input[type=date], input[type=number] { width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 12px; box-sizing: border-box; }
+button { background: #0f172a; color: white; border: none; padding: 12px 22px; border-radius: 12px; cursor: pointer; }
+pre { background: #0b1736; color: #fff; padding: 18px; border-radius: 14px; overflow: auto; white-space: pre-wrap; }
+.topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+.logout { color: #0f172a; text-decoration: none; font-weight: 600; }
+.checkrow { display: flex; align-items: center; gap: 10px; margin-top: 14px; }
+</style></head>
+<body>
+<div class="card">
+<div class="topbar"><h1>Jockey stats generator</h1><div>Logged in as <strong>{{ user }}</strong> | <a class="logout" href="/logout">Logout</a></div></div>
+<div class="row">
+<div class="field"><label>Facility / course name</label><input id="courseName" type="text" value="E FM" placeholder="E FM"></div>
+<div class="field"><label>Course ID, optional instead of name</label><input id="courseId" type="number" placeholder="Leave blank if using name"></div>
+<div class="field"><label>Meeting date</label><input id="date" type="date" value="2026-01-03"></div>
+<div><button id="generateBtn">Generate</button></div>
+</div>
+<div class="checkrow"><input id="persist" type="checkbox"><label for="persist" style="margin:0; font-weight:400;">Persist result to database</label></div>
+</div>
+<div class="card"><h2>Response</h2><pre id="output">Ready.</pre></div>
+<script>
+document.getElementById('generateBtn').addEventListener('click', async function () {
+  const courseName = document.getElementById('courseName').value.trim();
+  const courseId = document.getElementById('courseId').value.trim();
+  const date = document.getElementById('date').value;
+  const persist = document.getElementById('persist').checked;
+  const output = document.getElementById('output');
+  const params = new URLSearchParams();
+  if (date) params.set('date', date);
+  if (courseId) { params.set('courseId', courseId); } else if (courseName) { params.set('courseName', courseName); }
+  if (persist) params.set('persist', 'true');
+  output.textContent = 'Loading...';
+  try {
+    const response = await fetch(`/jockey-stats?${params.toString()}`, { credentials: 'same-origin' });
+    const rawText = await response.text();
+    let parsed;
+    try { parsed = JSON.parse(rawText); } catch { parsed = { raw_response: rawText }; }
+    output.textContent = JSON.stringify({ status: response.status, ok: response.ok, data: parsed }, null, 2);
+  } catch (error) {
+    output.textContent = JSON.stringify({ error: String(error) }, null, 2);
+  }
+});
+</script></body></html>
