@@ -10,11 +10,11 @@ button { margin-top: 18px; width: 100%; background: #0f172a; color: white; borde
 .error { margin-top: 12px; color: #b91c1c; }
 .hint { margin-top: 12px; color: #475569; font-size: 14px; }
 </style></head>
-<body><div class="card"><h1>Login</h1>
+<body><div class="card"><h1>Jockey Stats</h1>
 <form method="post" action="/login">
 <label>Username</label><input name="username" type="text" autocomplete="username" required>
 <label>Password</label><input name="password" type="password" autocomplete="current-password" required>
 <button type="submit">Sign in</button></form>
 {% if error %}<div class="error">{{ error }}</div>{% endif %}
-<div class="hint">Use username <strong>admin</strong> and password <strong>admin123</strong>.</div>
+
 </div></body></html>
