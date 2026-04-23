@@ -22,7 +22,7 @@ app = FastAPI(
 )
 
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("SESSION_SECRET", "change-this-secret"))
-templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
+templates = Jinja2Templates(directory="templates")
 
 PRICE_BANDS: List[Tuple[str, float, float]] = [
     ("1.01-1.99", 1.01, 1.99),
