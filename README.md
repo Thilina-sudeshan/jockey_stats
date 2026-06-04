@@ -4,9 +4,7 @@ Mandatory endpoints:
 - GET /jockey-stats?date=YYYY-MM-DD&courseName=XXX
 - GET /jockey-stats?date=YYYY-MM-DD&courseId=XXX
 
-Login:
-- username: admin
-- password: admin123
+
 
 How to run:
 1. Update config.json if needed
